@@ -24,7 +24,8 @@
             ],
             "*": [
                 "node_modules/*"
-            ]
+            ],
+            "@assets/*": ["./src/assetsassets/*"]
         },
         "moduleResolution": "node",
         "types": ["node", "jest"] 
