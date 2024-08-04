@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
         "@testing-library/jest-dom": "^6.0.0",
-        "@testing-library/react": "^13.1.1",
+        "@testing-library/react": "^14.1.2",
         "@testing-library/user-event": "^13.5.0",
         "@types/node": "^16.18.104",
         "@types/react": "^18.3.3",
@@ -39,7 +39,7 @@
         ]
     },
     "devDependencies": {
-        "@testing-library/react": "^16.0.0",
+        "@testing-library/react": "^14.1.2",
         "@types/jest": "^29.5.12",
         "clean-webpack-plugin": "^4.0.0",
         "css-loader": "^7.1.2",
