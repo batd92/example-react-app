@@ -1,11 +1,7 @@
 // Chakra imports
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import Footer from '../../components/footer/FooterAuth';
-import FixedPlugin from '../../components/fixedPlugin/FixedPlugin';
-// Custom components
 import { NavLink } from 'react-router-dom';
-// Assets
 import { FaChevronLeft } from 'react-icons/fa';
 import React from 'react';
 
@@ -62,9 +58,7 @@ function AuthIllustration(props: { children: JSX.Element | string; illustrationB
 						borderBottomLeftRadius={{ lg: '120px', xl: '200px' }}
 					/>
 				</Box>
-				<Footer />
 			</Flex>
-			<FixedPlugin />
 		</Flex>
 	);
 }

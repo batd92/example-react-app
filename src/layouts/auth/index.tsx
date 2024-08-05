@@ -2,10 +2,7 @@ import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from '../../routes';
 
-// Chakra imports
 import { Box, useColorModeValue } from '@chakra-ui/react';
-
-// Layout components
 import { SidebarContext } from '../../contexts/SidebarContext';
 import React from 'react';
 

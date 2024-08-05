@@ -32,21 +32,11 @@ export default function SidebarDocs() {
 				<Image src={logoWhite} w='40px' h='40px' />
 			</Flex>
 			<Flex direction='column' mb='12px' align='center' justify='center' px='15px' pt='55px'>
-				<Text
-					fontSize={{ base: 'lg', xl: '18px' }}
-					color='white'
-					fontWeight='bold'
-					lineHeight='150%'
-					textAlign='center'
-					px='10px'
-					mb='14px'>
-					Upgrade to PRO
-				</Text>
 				<Text fontSize='14px' color={'white'} px='10px' mb='14px' textAlign='center'>
-					Improve your development process and start doing more with Horizon UI PRO!
+				The biggest adventure you can take is to live the life of your dreams!
 				</Text>
 			</Flex>
-			<Link href='https://horizon-ui.com/pro'>
+			<Link href='#'>
 				<Button
 					bg='whiteAlpha.300'
 					_hover={{ bg: 'whiteAlpha.200' }}
@@ -57,7 +47,7 @@ export default function SidebarDocs() {
 					fontSize='sm'
 					minW='185px'
 					mx='auto'>
-					Upgrade to PRO
+					APT PRO
 				</Button>
 			</Link>
 		</Flex>

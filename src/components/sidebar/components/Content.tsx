@@ -1,16 +1,12 @@
 // chakra imports
 import { Box, Flex, Stack } from '@chakra-ui/react';
-//   Custom components
 import Brand from '../../sidebar/components/Brand';
 import Links from '../../sidebar/components/Links';
 import SidebarCard from '../../sidebar/components/SidebarCard';
 import React from 'react';
 
-// FUNCTIONS
-
 function SidebarContent(props: { routes: RoutesType[] }) {
 	const { routes } = props;
-	// SIDEBAR
 	return (
 		<Flex direction='column' height='100%' pt='25px' borderRadius='30px'>
 			<Brand />

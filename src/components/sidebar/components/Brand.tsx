@@ -1,13 +1,10 @@
-// Chakra imports
 import { Flex, useColorModeValue } from '@chakra-ui/react';
 
-// Custom components
 import { HorizonLogo } from '../../icons/Icons';
 import { HSeparator } from '../../separator/Separator';
 import React from 'react';
 
 export function SidebarBrand() {
-	//   Chakra color mode
 	let logoColor = useColorModeValue('navy.700', 'white');
 
 	return (

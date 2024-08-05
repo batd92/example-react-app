@@ -1,6 +1,5 @@
 // Chakra imports
 import { Portal, Box, useDisclosure } from '@chakra-ui/react';
-import Footer from '../../components/footer/FooterAdmin';
 // Layout components
 import Navbar from '../../components/navbar/NavbarAdmin';
 import Sidebar from '../../components/sidebar/Sidebar';
@@ -26,7 +25,7 @@ export default function Dashboard(props: { [x: string]: any }) {
                 return route.name;
             }
         }
-        return 'Knowledge';
+        return '';
     };
 
     const getActiveNavbar = (routes: RoutesType[]): boolean => {
@@ -105,9 +104,6 @@ export default function Dashboard(props: { [x: string]: any }) {
                             </Routes>
                         </Box>
                     ) : null}
-                    <Box>
-                        <Footer />
-                    </Box>
                 </Box>
             </SidebarContext.Provider>
         </Box>
