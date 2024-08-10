@@ -9,7 +9,7 @@ import SignInCentered from './views/auth/signIn';
 
 const routes = [
     {
-        name: 'NFT Marketplace',
+        name: 'NFT Vocabulary',
         layout: '/admin',
         path: '/nft-marketplace',
         icon: (

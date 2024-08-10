@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Flex,
@@ -17,14 +17,70 @@ import Nft3 from '../../../assets/img/nfts/Nft3.png';
 import Nft4 from '../../../assets/img/nfts/Nft4.png';
 import Nft5 from '../../../assets/img/nfts/Nft5.png';
 import Nft6 from '../../../assets/img/nfts/Nft6.png';
-import Avatar1 from '../../../assets/img/avatars/avatar1.png';
-import Avatar2 from '../../../assets/img/avatars/avatar2.png';
-import Avatar3 from '../../../assets/img/avatars/avatar3.png';
-import Avatar4 from '../../../assets/img/avatars/avatar4.png';
 
 export default function Marketplace() {
     const textColor = useColorModeValue('secondaryGray.900', 'white');
     const textColorBrand = useColorModeValue('brand.500', 'white');
+
+    const [selectedCategory, setSelectedCategory] = useState("All");
+
+    const nftData = [
+        {
+            name: "Abstract Colors",
+            author: "By Esthera Jackson",
+            image: Nft1,
+            download: "#",
+            category: "Art",
+        },
+        {
+            name: "ETH AI Brain",
+            author: "By Nick Wilson",
+            image: Nft2,
+            download: "#",
+            category: "Art",
+        },
+        {
+            name: "Mesh Gradients",
+            author: "By Will Smith",
+            image: Nft3,
+            download: "#",
+            category: "Music",
+        },
+        {
+            name: "Swipe Circles",
+            author: "By Peter Will",
+            image: Nft4,
+            download: "#",
+            category: "Collectibles",
+        },
+        {
+            name: "Colorful Heaven",
+            author: "By Mark Benjamin",
+            image: Nft5,
+            currentbid: "0.91 ETH",
+            download: "#",
+            category: "Sports",
+        },
+        {
+            name: "3D Cubes Art",
+            author: "By Manny Gates",
+            image: Nft6,
+            download: "#",
+            category: "Art",
+        },
+    ];
+
+    const linkData = [
+        { text: "All", href: "#all" },
+        { text: "Art", href: "#art" },
+        { text: "Music", href: "#music" },
+        { text: "Collectibles", href: "#collectibles" },
+        { text: "Sports", href: "#sports" },
+    ];
+
+    const filteredNftData = selectedCategory === "All" 
+        ? nftData 
+        : nftData.filter(nft => nft.category === selectedCategory);
 
     return (
         <Box pt={{ base: '180px', md: '80px', xl: '80px' }}>
@@ -57,142 +113,30 @@ export default function Marketplace() {
                                 ms={{ base: '24px', md: '0px' }}
                                 mt={{ base: '20px', md: '0px' }}
                             >
-                                <Link
-                                    color={textColorBrand}
-                                    fontWeight="500"
-                                    me={{ base: '34px', md: '44px' }}
-                                    href="#art"
-                                >
-                                    Art
-                                </Link>
-                                <Link
-                                    color={textColorBrand}
-                                    fontWeight="500"
-                                    me={{ base: '34px', md: '44px' }}
-                                    href="#music"
-                                >
-                                    Music
-                                </Link>
-                                <Link
-                                    color={textColorBrand}
-                                    fontWeight="500"
-                                    me={{ base: '34px', md: '44px' }}
-                                    href="#collectibles"
-                                >
-                                    Collectibles
-                                </Link>
-                                <Link
-                                    color={textColorBrand}
-                                    fontWeight="500"
-                                    href="#sports"
-                                >
-                                    Sports
-                                </Link>
+                                {linkData.map((link, index) => (
+                                    <Link
+                                        key={index}
+                                        color={textColorBrand}
+                                        fontWeight="500"
+                                        me={{ base: '34px', md: '44px' }}
+                                        href={link.href}
+                                        onClick={() => setSelectedCategory(link.text)}
+                                    >
+                                        {link.text}
+                                    </Link>
+                                ))}
                             </Flex>
                         </Flex>
                         <SimpleGrid columns={{ base: 1, md: 5 }} gap="20px">
-                            <NFT
-                                name="Abstract Colors"
-                                author="By Esthera Jackson"
-                                bidders={[
-                                    Avatar1,
-                                    Avatar2,
-                                    Avatar3,
-                                    Avatar4,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                ]}
-                                image={Nft1}
-                                currentbid="0.91 ETH"
-                                download="#"
-                            />
-                            <NFT
-                                name="ETH AI Brain"
-                                author="By Nick Wilson"
-                                bidders={[
-                                    Avatar1,
-                                    Avatar2,
-                                    Avatar3,
-                                    Avatar4,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                ]}
-                                image={Nft2}
-                                currentbid="0.91 ETH"
-                                download="#"
-                            />
-                            <NFT
-                                name="Mesh Gradients "
-                                author="By Will Smith"
-                                bidders={[
-                                    Avatar1,
-                                    Avatar2,
-                                    Avatar3,
-                                    Avatar4,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                ]}
-                                image={Nft3}
-                                currentbid="0.91 ETH"
-                                download="#"
-                            />
-                            <NFT
-                                name="Swipe Circles"
-                                author="By Peter Will"
-                                bidders={[
-                                    Avatar1,
-                                    Avatar2,
-                                    Avatar3,
-                                    Avatar4,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                ]}
-                                image={Nft4}
-                                currentbid="0.91 ETH"
-                                download="#"
-                            />
-                            <NFT
-                                name="Colorful Heaven"
-                                author="By Mark Benjamin"
-                                bidders={[
-                                    Avatar1,
-                                    Avatar2,
-                                    Avatar3,
-                                    Avatar4,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                ]}
-                                image={Nft5}
-                                currentbid="0.91 ETH"
-                                download="#"
-                            />
-                            <NFT
-                                name="3D Cubes Art"
-                                author="By Manny Gates"
-                                bidders={[
-                                    Avatar1,
-                                    Avatar2,
-                                    Avatar3,
-                                    Avatar4,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                    Avatar1,
-                                ]}
-                                image={Nft6}
-                                currentbid="0.91 ETH"
-                                download="#"
-                            />
+                            {filteredNftData.map((nft, index) => (
+                                <NFT
+                                    key={index}
+                                    name={nft.name}
+                                    author={nft.author}
+                                    image={nft.image}
+                                    download={nft.download}
+                                />
+                            ))}
                         </SimpleGrid>
                     </Flex>
                 </Flex>
