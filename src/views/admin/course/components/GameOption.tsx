@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
 	Avatar,
 	Box,
@@ -25,6 +25,7 @@ interface Flashcard {
 }
 
 const TIME_SEC = 5;
+
 // Fake flashcards data
 const fakeFlashcards: Flashcard[] = [
 	{
@@ -40,8 +41,8 @@ const fakeFlashcards: Flashcard[] = [
 		answer: 'Harper Lee',
 	},
 	{
-		question: '"To Kill a Mockingbird"?',
-		answer: 'Harper',
+		question: 'What is the largest mammal?',
+		answer: 'Blue Whale',
 	}
 ];
 
@@ -53,21 +54,12 @@ const generateOptions = (answer: string, allAnswers: string[]): string[] => {
 		options.add(randomAnswer);
 	}
 
-	const optionsArray = Array.from(options);
-
-	for (let i = optionsArray.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
-	}
-
-	return optionsArray;
+	return Array.from(options).sort(() => Math.random() - 0.5);
 };
 
-const getAllAnswers = (flashcards: Flashcard[]): string[] => {
-	return flashcards.map(card => card.answer);
-};
+const getAllAnswers = (flashcards: Flashcard[]): string[] =>
+	flashcards.map(card => card.answer);
 
-// Component chính
 export default function GameOption(props: {
 	banner: string;
 	avatar: string;
@@ -86,55 +78,48 @@ export default function GameOption(props: {
 
 	const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
 	const [selectedOption, setSelectedOption] = useState<string>('');
+	const [optionCorrect, setOptionCorrect] = useState<string>('');
 	const [isAnswerShown, setIsAnswerShown] = useState<boolean>(false);
 	const [answeredCount, setAnsweredCount] = useState(0);
 	const [showResult, setShowResult] = useState(false);
 	const [timer, setTimer] = useState(TIME_SEC);
 	const [results, setResults] = useState<{ question: string; selected: string; answer: string }[]>([]);
 
-
-	const currentFlashcard = fakeFlashcards[currentFlashcardIndex] || { question: '', answer: '' };
+	const currentFlashcard = fakeFlashcards[currentFlashcardIndex];
 	const allAnswers = useMemo(() => getAllAnswers(fakeFlashcards), []);
-	const options = useMemo(() => {
-		if (currentFlashcard) {
-			return generateOptions(currentFlashcard.answer, allAnswers);
-		}
-		return [];
-	}, [currentFlashcardIndex, currentFlashcard, allAnswers]);
+	const options = useMemo(() => generateOptions(currentFlashcard.answer, allAnswers), [currentFlashcardIndex, allAnswers]);
 
 	useEffect(() => {
+		let countdown: NodeJS.Timeout;
 		if (timer > 0 && !isAnswerShown) {
-			const countdown = setInterval(() => {
-				setTimer(prevTimer => prevTimer - 1);
-			}, 1000);
-
-			return () => clearInterval(countdown);
+			countdown = setInterval(() => setTimer(prevTimer => prevTimer - 1), 1000);
 		} else if (timer === 0 && !isAnswerShown) {
 			handleNextClick();
 		}
+
+		return () => clearInterval(countdown);
 	}, [timer, isAnswerShown]);
 
-	const handleOptionClick = (option: string) => {
+	const handleOptionClick = useCallback((option: string) => {
 		if (isAnswerShown) return;
 
-		setSelectedOption(option);
 		setIsAnswerShown(true);
+		setOptionCorrect(currentFlashcard.answer);
 
 		if (option === currentFlashcard.answer) {
 			setAnsweredCount(prevCount => prevCount + 1);
 		}
+
+		setSelectedOption(option);
 
 		setResults(prevResults => [
 			...prevResults,
 			{ question: currentFlashcard.question, selected: option, answer: currentFlashcard.answer }
 		]);
 
-		setTimeout(() => {
-			handleNextClick();
-		}, 1000);
-	};
+	}, [currentFlashcard, isAnswerShown]);
 
-	const handleNextClick = () => {
+	const handleNextClick = useCallback(() => {
 		if (currentFlashcardIndex === fakeFlashcards.length - 1) {
 			setShowResult(true);
 		} else {
@@ -143,31 +128,33 @@ export default function GameOption(props: {
 			setTimer(TIME_SEC);
 			setIsAnswerShown(false);
 		}
-	};
+	}, [currentFlashcardIndex]);
 
-	const handlePlayClick = () => {
+	const handlePlayClick = useCallback(() => {
 		setCurrentFlashcardIndex(0);
 		setSelectedOption('');
 		setShowResult(false);
 		setAnsweredCount(0);
 		setTimer(TIME_SEC);
-	};
+		setResults([]);
+		setIsAnswerShown(false);
+	}, []);
 
 	useEffect(() => {
 		const handleKeyPress = (event: KeyboardEvent) => {
-			if (event.key === 'Enter') {
+			if (event.key === 'Enter' && !showResult) {
 				handleNextClick();
 			}
 		};
 
 		document.addEventListener('keydown', handleKeyPress);
 		return () => document.removeEventListener('keydown', handleKeyPress);
-	}, []);
+	}, [handleNextClick, showResult]);
 
 	useEffect(() => {
 		if (showResult) {
 			toast({
-				title: `Game Over!`,
+				title: 'Game Over!',
 				description: `You answered ${answeredCount} out of ${fakeFlashcards.length} questions correctly.`,
 				status: 'success',
 				duration: 5000,
@@ -175,12 +162,12 @@ export default function GameOption(props: {
 				position: 'top',
 			});
 		}
-	}, [showResult, answeredCount, fakeFlashcards.length, toast]);
+	}, [showResult, answeredCount, toast]);
 
 	return (
 		<Flex direction="row" width="100%" gap="20px" {...rest}>
 			<Box width={{ base: '100%', md: '33.33%' }} mb="20px">
-				<SimpleGrid columns={{ base: 1, md: 1 }} spacing="20px" mb="20px">
+				<SimpleGrid columns={1} spacing="20px" mb="20px">
 					<Card mb="10px" alignItems="center" width="100%">
 						<Flex direction="row" justify="space-between" align="center" width="100%" p="20px">
 							<Flex direction="column" align="center">
@@ -243,78 +230,57 @@ export default function GameOption(props: {
 
 			<Box width={{ base: '100%', md: '66.67%' }} mb="20px">
 				<Card mb={{ base: '10px', lg: '20px' }} p='20px' width='100%'>
-					{currentFlashcard && currentFlashcard.question && (
+					{showResult ? (
+						<Box textAlign='center'>
+							<Text fontSize='xl' mb='10px'>Game Over!</Text>
+							<Text fontSize='lg' mb='10px'>
+								You answered {answeredCount} out of {fakeFlashcards.length} questions correctly.
+							</Text>
+							<Button onClick={handlePlayClick} colorScheme='teal'>Play Again</Button>
+						</Box>
+					) : (
 						<>
-							<Box mb='25px' textAlign='center'>
-								<Text fontSize='xl' fontWeight='bold'>
-									{currentFlashcard.question}
-								</Text>
-							</Box>
-							<Box mb='30px' width='100%' textAlign='center'>
-								<Progress colorScheme='green' size='md' value={(timer / TIME_SEC) * 100} width='100%' />
-								<Text mt='10px' fontSize='sm'>
-									Time remaining: {timer}s
-								</Text>
-							</Box>
-							<SimpleGrid columns={{ base: 1, md: 2 }} gap="20px" mb='25px'>
-								{options.map((option, index) => {
-									const isCorrectAnswer = option === currentFlashcard.answer;
-									const isSelectedWrongAnswer = option === selectedOption && !isCorrectAnswer;
-									return (
-										<Button
-											key={index}
-											width='100%'
-											height='100px'
-											fontWeight="bold"
-											fontSize="xl"
-											mt="10px"
-											_hover={{ bg: useColorModeValue('gray.100', 'gray.800') }}
-											_active={{ bg: useColorModeValue('gray.200', 'gray.600') }}
-											_focus={{ boxShadow: 'none' }}
-											bg={isAnswerShown && isCorrectAnswer ? 'green.400' : isSelectedWrongAnswer ? 'red.400' : undefined}
-											onClick={() => handleOptionClick(option)}
-										>
-											<Text color={textColorPrimary} fontWeight="bold" fontSize="xl">
-												{option}
-											</Text>
-										</Button>
-									);
-								})}
-							</SimpleGrid>
-							<Flex direction="row" justify="flex-start" gap="20px">
-								<Button
-									colorScheme="blue"
-									onClick={handleNextClick}
-									size="lg"
-									width='50%'
-									height='100px'
-									fontWeight="bold"
-									fontSize="xl"
-									mt="10px"
-									isDisabled={showResult || currentFlashcardIndex === fakeFlashcards.length - 1}
-								>
-									Next
-								</Button>
-								<Button
-									colorScheme="teal"
-									onClick={handlePlayClick}
-									size="lg"
-									width='50%'
-									height='100px'
-									fontWeight="bold"
-									fontSize="xl"
-									mt="10px"
-									isDisabled={!showResult}
-								>
-									Play Again
-								</Button>
-							</Flex>
+							{currentFlashcard && currentFlashcard.question && (
+								<>
+									<Box mb='25px' textAlign='center'>
+										<Text fontSize='xl' fontWeight='bold'>
+											{currentFlashcard.question}
+										</Text>
+									</Box>
+									<Box mb='30px' width='100%' textAlign='center'>
+										<Progress colorScheme='green' size='md' value={(timer / TIME_SEC) * 100} width='100%' />
+										<Text mt='10px' fontSize='sm'>
+											Time remaining: {timer}s
+										</Text>
+									</Box>
+									<SimpleGrid columns={{ base: 1, md: 2 }} gap="20px" mb='25px'>
+										{options.map((option, index) => {
+											const isCorrectAnswer = option === optionCorrect;
+											const isSelectedWrongAnswer = option === selectedOption && !isCorrectAnswer;
+											return (
+												<Button
+													key={index}
+													width='100%'
+													height='100px'
+													fontWeight="bold"
+													fontSize="xl"
+													mt="10px"
+													bg={isAnswerShown ? (isCorrectAnswer ? 'green.400' : isSelectedWrongAnswer ? 'red.400' : undefined) : undefined}
+													onClick={() => handleOptionClick(option)}
+												>
+													<Text color={textColorPrimary} fontWeight="bold" fontSize="xl">
+														{option}
+													</Text>
+												</Button>
+											);
+										})}
+									</SimpleGrid>
+								</>
+							)}
 						</>
 					)}
 				</Card>
 			</Box>
 		</Flex>
 	);
-
 }
-
