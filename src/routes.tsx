@@ -1,11 +1,12 @@
 import React from 'react';
 import { Icon } from '@chakra-ui/react';
-import { MdPerson, MdLock, MdOutlineShoppingCart } from 'react-icons/md';
+import { MdPerson, MdLock, MdOutlineFreeBreakfast, MdOutlineHighlight } from 'react-icons/md';
 
 // Admin Imports
 import NFTMarketplace from './views/admin/marketplace';
 import Profile from './views/admin/profile';
 import SignInCentered from './views/auth/signIn';
+import Course from './views/admin/course';
 
 const routes = [
     {
@@ -14,7 +15,7 @@ const routes = [
         path: '/nft-marketplace',
         icon: (
             <Icon
-                as={MdOutlineShoppingCart}
+                as={MdOutlineFreeBreakfast}
                 width="20px"
                 height="20px"
                 color="inherit"
@@ -36,6 +37,13 @@ const routes = [
         path: '/sign-in',
         icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
         component: <SignInCentered />,
+    },
+    {
+        name: 'Course',
+        layout: '/admin',
+        path: '/course/:courseId',
+        icon: <Icon as={MdOutlineHighlight} width="20px" height="20px" color="inherit" />,
+        component: <Course />,
     },
 ];
 

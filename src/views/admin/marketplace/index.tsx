@@ -29,43 +29,42 @@ export default function Marketplace() {
             name: "Abstract Colors",
             author: "By Esthera Jackson",
             image: Nft1,
-            download: "#",
+            courseId: "1",
             category: "Art",
         },
         {
             name: "ETH AI Brain",
             author: "By Nick Wilson",
             image: Nft2,
-            download: "#",
+            courseId: "2",
             category: "Art",
         },
         {
             name: "Mesh Gradients",
             author: "By Will Smith",
             image: Nft3,
-            download: "#",
+            courseId: "3",
             category: "Music",
         },
         {
             name: "Swipe Circles",
             author: "By Peter Will",
             image: Nft4,
-            download: "#",
+            courseId: "4",
             category: "Collectibles",
         },
         {
             name: "Colorful Heaven",
             author: "By Mark Benjamin",
             image: Nft5,
-            currentbid: "0.91 ETH",
-            download: "#",
+            courseId: "5",
             category: "Sports",
         },
         {
             name: "3D Cubes Art",
             author: "By Manny Gates",
             image: Nft6,
-            download: "#",
+            courseId: "6",
             category: "Art",
         },
     ];
@@ -134,7 +133,7 @@ export default function Marketplace() {
                                     name={nft.name}
                                     author={nft.author}
                                     image={nft.image}
-                                    download={nft.download}
+                                    courseId={nft.courseId}
                                 />
                             ))}
                         </SimpleGrid>

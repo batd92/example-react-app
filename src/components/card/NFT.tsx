@@ -12,16 +12,19 @@ import Card from './Card';
 import { useState } from 'react';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function NFT(props: {
 	image: string;
 	name: string;
 	author: string;
-	download: string;
+	courseId: string;
 }) {
-	const { image, name, author, download } = props;
+	const { image, name, author, courseId } = props;
 	const [like, setLike] = useState(false);
 	const textColor = useColorModeValue('navy.700', 'white');
+
+	const navigate = useNavigate();
 
 	return (
 		<Card p='20px'>
@@ -89,19 +92,18 @@ export default function NFT(props: {
 						justifyContent='center'
 						mt='25px'
 					>
-						<Link href={download}>
-							<Button
-								variant='darkBrand'
-								color='white'
-								fontSize='sm'
-								fontWeight='500'
-								borderRadius='70px'
-								px='24px'
-								py='5px'
-							>
-								Place Bid
-							</Button>
-						</Link>
+						<Button
+							variant='darkBrand'
+							color='white'
+							fontSize='sm'
+							fontWeight='500'
+							borderRadius='70px'
+							px='24px'
+							py='5px'
+							onClick={() => navigate(`/admin/course/${courseId}`)}
+						>
+							Learn
+						</Button>
 					</Flex>
 				</Flex>
 			</Flex>
